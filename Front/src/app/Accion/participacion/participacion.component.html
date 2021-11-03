@@ -1,0 +1,703 @@
+
+<link href="participacion.component.css" rel="stylesheet">
+<div class="container">
+    <div class="class">
+        <div class="card-header">
+            <h3>Selector de Tiempo de juego</h3>
+        </div>
+        <div>
+            <label >Tiempo de juego:
+                <select [(ngModel)]="tiempo" name="tiempo" id="tiempo">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <!--<option value="3">F</option>-->
+                  </select>
+            </label>
+            <label >Equipo Interesado:
+                <select [(ngModel)]="team" (change) = "filterPlayers()" name="team" id="team">
+                      <option value="home">Local</option>
+                      <option value="away">Visitante</option>
+                      <!-- <option value="ambos">Ambos</option> -->
+                  </select>
+            </label>
+            
+        </div>
+        
+        <div class="card-header">
+            <h3>Stats por zonas</h3>
+        </div>
+
+        <div *ngIf = "tiempo == 1 && team == 'home'" >
+            <label for="">Jugador Interesado:
+                <select [(ngModel)]="playerZ" (change) = "filterPlayers()" name="ply" id="ply">
+                    <option value="All">Todos</option>  
+                    <option  *ngFor = "let player of players" [value] = player>{{player}}</option>
+                  </select>
+            </label>
+            <table class="tabla-terreno">
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0,0.34)" class="button-t" type="button">Zona1</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0,0.34)" class="button-t" type="button">Zona4</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0,0.34)" class="button-t" type="button">Zona7</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0,0.34)" class="button-t" type="button">Zona10</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0,0.34)" class="button-t" type="button">Zona13</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.34,0.68)" class="button-t" type="button">Zona2</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.34,0.68)" class="button-t" type="button">Zona5</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.34,0.68)" class="button-t" type="button">Zona8</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.34,0.68)" class="button-t" type="button">Zona11</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.34,0.68)" class="button-t" type="button">Zona14</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.68,1.01)" class="button-t" type="button">Zona3</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.68,1.01)" class="button-t" type="button">Zona6</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.68,1.01)" class="button-t" type="button">Zona9</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.68,1.01)" class="button-t" type="button">Zona12</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.68,1.01)" class="button-t" type="button">Zona15</button></td> 
+                </tr>
+                
+            </table>
+            
+            <table *ngIf = "accionesZ.length != 0" class="table table-hover" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>Tipo</th>
+                        <th>Subtipo</th>
+                        <th>Periodo</th>
+                        <th>Inicio x (Metros)</th>
+                        <th>Inicio y (Metros)</th>
+                        <th>Fin x (Metros)</th>
+                        <th>Fin y (Metros)</th>
+                        <th>Juega con</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let accionZ of accionesZ" class="text-center">
+                        <td>{{accionZ.team}}</td>
+                        <td>{{accionZ.typeAccion}}</td>
+                        <td>{{accionZ.subtype}}</td>
+                        <td>{{accionZ.periodAccion}}</td>
+                        <td>{{accionZ.startX * 100 | number:'1.2-2' }}</td>
+                        <td>{{accionZ.startY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endX * 100 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.toP}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+           <div *ngIf = "playerZ == 'All'" >
+                <div style="display: block;">
+                    <canvas baseChart 
+                      [datasets]="barChartData"
+                      [labels]="barChartLabels"
+                      [options]="barChartOptions"
+                      [plugins]="barChartPlugins"
+                      [legend]="barChartLegend"
+                      [chartType]="barChartType"
+                      [colors]="backgroundColores">
+                      
+                    </canvas>
+                  </div>
+                  <div class="card-header">
+                    <h3>Posesion general en zona: {{incidenciaZ | number:'1.2-2' }} %</h3>
+                    <h3 >Posesion de equipo en zona: {{incidenciaZT | number:'1.2-2' }} %</h3>
+                </div>
+            </div> 
+
+        </div>
+
+        <div *ngIf = "tiempo == 1 && team == 'away'" >
+            <label for="">Jugador Interesado:
+                <select [(ngModel)]="playerZ" (change) = "filterPlayers()" name="ply" id="ply">
+                    <option value="All">Todos</option>  
+                    <option  *ngFor = "let player of players" [value] = player>{{player}}</option>
+                  </select>
+            </label>
+            <table class="tabla-terreno">
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.68,1.01)" class="button-t" type="button">Zona1</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.68,1.01)" class="button-t" type="button">Zona4</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.68,1.01)" class="button-t" type="button">Zona7</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.68,1.01)" class="button-t" type="button">Zona10</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.68,1.01)" class="button-t" type="button">Zona13</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.34,0.68)" class="button-t" type="button">Zona2</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.34,0.68)" class="button-t" type="button">Zona5</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.34,0.68)" class="button-t" type="button">Zona8</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.34,0.68)" class="button-t" type="button">Zona11</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.34,0.68)" class="button-t" type="button">Zona14</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0,0.34)" class="button-t" type="button">Zona3</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0,0.34)" class="button-t" type="button">Zona6</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0,0.34)" class="button-t" type="button">Zona9</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0,0.34)" class="button-t" type="button">Zona12</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0,0.34)" class="button-t" type="button">Zona15</button></td> 
+                </tr>
+                
+            </table>
+            
+            <table *ngIf = "accionesZ.length != 0" class="table table-hover" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>Tipo</th>
+                        <th>Subtipo</th>
+                        <th>Periodo</th>
+                        <th>Inicio x (Metros)</th>
+                        <th>Inicio y (Metros)</th>
+                        <th>Fin x (Metros)</th>
+                        <th>Fin y (Metros)</th>
+                        <th>Juega con</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let accionZ of accionesZ" class="text-center">
+                        <td>{{accionZ.team}}</td>
+                        <td>{{accionZ.typeAccion}}</td>
+                        <td>{{accionZ.subtype}}</td>
+                        <td>{{accionZ.periodAccion}}</td>
+                        <td>{{accionZ.startX * 100 | number:'1.2-2' }}</td>
+                        <td>{{accionZ.startY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endX * 100 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.toP}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf = "playerZ == 'All'" >
+                <div style="display: block;">
+                    <canvas baseChart 
+                      [datasets]="barChartData"
+                      [labels]="barChartLabels"
+                      [options]="barChartOptions"
+                      [plugins]="barChartPlugins"
+                      [legend]="barChartLegend"
+                      [chartType]="barChartType"
+                      [colors]="backgroundColores">
+                      
+                    </canvas>
+                  </div>
+                  <div class="card-header">
+                    <h3>Posesion general en zona: {{incidenciaZ | number:'1.2-2' }} %</h3>
+                    <h3 >Posesion de equipo en zona: {{incidenciaZT | number:'1.2-2' }} %</h3>
+                </div>
+            </div> 
+        </div>
+
+        <!-- <div *ngIf = "tiempo == 1 && team == 'ambos'" >
+            <label for="">Jugador Interesado:
+                <select [(ngModel)]="playerZ" (change) = "filterPlayers()" name="ply" id="ply">
+                    <option  *ngFor = "let player of players" [value] = player>{{player}}</option>
+                  </select>
+            </label>
+            <table class="tabla-terreno">
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0,0.34)" class="button-t" type="button">Zona1</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0,0.34)" class="button-t" type="button">Zona4</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0,0.34)" class="button-t" type="button">Zona7</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0,0.34)" class="button-t" type="button">Zona10</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0,0.34)" class="button-t" type="button">Zona13</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.34,0.68)" class="button-t" type="button">Zona2</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.34,0.68)" class="button-t" type="button">Zona5</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.34,0.68)" class="button-t" type="button">Zona8</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.34,0.68)" class="button-t" type="button">Zona11</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.34,0.68)" class="button-t" type="button">Zona14</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.68,1.01)" class="button-t" type="button">Zona3</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.68,1.01)" class="button-t" type="button">Zona6</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.68,1.01)" class="button-t" type="button">Zona9</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.68,1.01)" class="button-t" type="button">Zona12</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.68,1.01)" class="button-t" type="button">Zona15</button></td> 
+                </tr>
+                
+            </table>
+            
+            <table *ngIf = "accionesZ.length != 0" class="table table-hover" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>Tipo</th>
+                        <th>Subtipo</th>
+                        <th>Periodo</th>
+                        <th>Inicio x (Metros)</th>
+                        <th>Inicio y (Metros)</th>
+                        <th>Fin x (Metros)</th>
+                        <th>Fin y (Metros)</th>
+                        <th>Juega con</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let accionZ of accionesZ" class="text-center">
+                        <td>{{accionZ.team}}</td>
+                        <td>{{accionZ.typeAccion}}</td>
+                        <td>{{accionZ.subtype}}</td>
+                        <td>{{accionZ.periodAccion}}</td>
+                        <td>{{accionZ.startX * 100 | number:'1.2-2' }}</td>
+                        <td>{{accionZ.startY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endX * 100 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.toP}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    -->
+        <div *ngIf = "tiempo == 2 && team == 'home'" >
+            <label for="">Jugador Interesado:
+                <select [(ngModel)]="playerZ" (change) = "filterPlayers()" name="ply" id="ply">
+                    <option value="All">Todos</option>  
+                    <option  *ngFor = "let player of players" [value] = player>{{player}}</option>
+                  </select>
+            </label>
+            <table class="tabla-terreno">
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.68,1.01)" class="button-t" type="button">Zona1</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.68,1.01)" class="button-t" type="button">Zona4</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.68,1.01)" class="button-t" type="button">Zona7</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.68,1.01)" class="button-t" type="button">Zona10</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.68,1.01)" class="button-t" type="button">Zona13</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.34,0.68)" class="button-t" type="button">Zona2</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.34,0.68)" class="button-t" type="button">Zona5</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.34,0.68)" class="button-t" type="button">Zona8</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.34,0.68)" class="button-t" type="button">Zona11</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.34,0.68)" class="button-t" type="button">Zona14</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0,0.34)" class="button-t" type="button">Zona3</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0,0.34)" class="button-t" type="button">Zona6</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0,0.34)" class="button-t" type="button">Zona9</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0,0.34)" class="button-t" type="button">Zona12</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0,0.34)" class="button-t" type="button">Zona15</button></td> 
+                </tr>
+                
+            </table>
+            
+            <table *ngIf = "accionesZ.length != 0" class="table table-hover" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>Tipo</th>
+                        <th>Subtipo</th>
+                        <th>Periodo</th>
+                        <th>Inicio x (Metros)</th>
+                        <th>Inicio y (Metros)</th>
+                        <th>Fin x (Metros)</th>
+                        <th>Fin y (Metros)</th>
+                        <th>Juega con</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let accionZ of accionesZ" class="text-center">
+                        <td>{{accionZ.team}}</td>
+                        <td>{{accionZ.typeAccion}}</td>
+                        <td>{{accionZ.subtype}}</td>
+                        <td>{{accionZ.periodAccion}}</td>
+                        <td>{{accionZ.startX * 100 | number:'1.2-2' }}</td>
+                        <td>{{accionZ.startY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endX * 100 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.toP}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf = "playerZ == 'All'" >
+                <div style="display: block;">
+                    <canvas baseChart 
+                      [datasets]="barChartData"
+                      [labels]="barChartLabels"
+                      [options]="barChartOptions"
+                      [plugins]="barChartPlugins"
+                      [legend]="barChartLegend"
+                      [chartType]="barChartType"
+                      [colors]="backgroundColores">
+                      
+                    </canvas>
+                  </div>
+                  <div class="card-header">
+                    <h3>Posesion general en zona: {{incidenciaZ | number:'1.2-2' }} %</h3>
+                    <h3 >Posesion de equipo en zona: {{incidenciaZT | number:'1.2-2' }} %</h3>
+                </div>
+            </div> 
+        </div>
+
+        <div *ngIf = "tiempo == 2 && team == 'away'" >
+            <label for="">Jugador Interesado:
+                <select [(ngModel)]="playerZ" (change) = "filterPlayers()" name="ply" id="ply">
+                    <option value="All">Todos</option>  
+                    <option  *ngFor = "let player of players" [value] = player>{{player}}</option>
+                  </select>
+            </label>
+            <table class="tabla-terreno">
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0,0.34)" class="button-t" type="button">Zona1</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0,0.34)" class="button-t" type="button">Zona4</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0,0.34)" class="button-t" type="button">Zona7</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0,0.34)" class="button-t" type="button">Zona10</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0,0.34)" class="button-t" type="button">Zona13</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.34,0.68)" class="button-t" type="button">Zona2</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.34,0.68)" class="button-t" type="button">Zona5</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.34,0.68)" class="button-t" type="button">Zona8</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.34,0.68)" class="button-t" type="button">Zona11</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.34,0.68)" class="button-t" type="button">Zona14</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.68,1.01)" class="button-t" type="button">Zona3</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.68,1.01)" class="button-t" type="button">Zona6</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.68,1.01)" class="button-t" type="button">Zona9</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.68,1.01)" class="button-t" type="button">Zona12</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.68,1.01)" class="button-t" type="button">Zona15</button></td> 
+                </tr>
+                
+            </table>
+            
+            <table *ngIf = "accionesZ.length != 0" class="table table-hover" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>Tipo</th>
+                        <th>Subtipo</th>
+                        <th>Periodo</th>
+                        <th>Inicio x (Metros)</th>
+                        <th>Inicio y (Metros)</th>
+                        <th>Fin x (Metros)</th>
+                        <th>Fin y (Metros)</th>
+                        <th>Juega con</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let accionZ of accionesZ" class="text-center">
+                        <td>{{accionZ.team}}</td>
+                        <td>{{accionZ.typeAccion}}</td>
+                        <td>{{accionZ.subtype}}</td>
+                        <td>{{accionZ.periodAccion}}</td>
+                        <td>{{accionZ.startX * 100 | number:'1.2-2' }}</td>
+                        <td>{{accionZ.startY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endX * 100 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.toP}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf = "playerZ == 'All'" >
+                <div style="display: block;">
+                    <canvas baseChart 
+                      [datasets]="barChartData"
+                      [labels]="barChartLabels"
+                      [options]="barChartOptions"
+                      [plugins]="barChartPlugins"
+                      [legend]="barChartLegend"
+                      [chartType]="barChartType"
+                      [colors]="backgroundColores">
+                      
+                    </canvas>
+                  </div>
+                  <div class="card-header">
+                    <h3>Posesion general en zona: {{incidenciaZ | number:'1.2-2' }} %</h3>
+                    <h3 >Posesion de equipo en zona: {{incidenciaZT | number:'1.2-2' }} %</h3>
+                </div>
+            </div> 
+        </div>
+
+        <!-- <div *ngIf = "tiempo == 2 && team == 'ambos'" >
+            <label for="">Jugador Interesado:
+                <select [(ngModel)]="playerZ" (change) = "filterPlayers()" name="ply" id="ply">
+                      <option  *ngFor = "let player of players" [value] = player>{{player}}</option>
+                  </select>
+            </label>
+            <table class="tabla-terreno">
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0,0.34)" class="button-t" type="button">Zona1</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0,0.34)" class="button-t" type="button">Zona4</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0,0.34)" class="button-t" type="button">Zona7</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0,0.34)" class="button-t" type="button">Zona10</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0,0.34)" class="button-t" type="button">Zona13</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.34,0.68)" class="button-t" type="button">Zona2</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.34,0.68)" class="button-t" type="button">Zona5</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.34,0.68)" class="button-t" type="button">Zona8</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.34,0.68)" class="button-t" type="button">Zona11</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.34,0.68)" class="button-t" type="button">Zona14</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.68,1.01)" class="button-t" type="button">Zona3</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.68,1.01)" class="button-t" type="button">Zona6</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.68,1.01)" class="button-t" type="button">Zona9</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.68,1.01)" class="button-t" type="button">Zona12</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.68,1.01)" class="button-t" type="button">Zona15</button></td> 
+                </tr>
+                
+            </table>
+            
+            <table *ngIf = "accionesZ.length != 0" class="table table-hover" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>Tipo</th>
+                        <th>Subtipo</th>
+                        <th>Periodo</th>
+                        <th>Inicio x (Metros)</th>
+                        <th>Inicio y (Metros)</th>
+                        <th>Fin x (Metros)</th>
+                        <th>Fin y (Metros)</th>
+                        <th>Juega con</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let accionZ of accionesZ" class="text-center">
+                        <td>{{accionZ.team}}</td>
+                        <td>{{accionZ.typeAccion}}</td>
+                        <td>{{accionZ.subtype}}</td>
+                        <td>{{accionZ.periodAccion}}</td>
+                        <td>{{accionZ.startX * 100 | number:'1.2-2' }}</td>
+                        <td>{{accionZ.startY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endX * 100 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.toP}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>-->
+        <!--
+        <div *ngIf = "tiempo == 3 && team == 'home'" >
+            <label for="">Jugador Interesado:
+                <select [(ngModel)]="playerZ" (change) = "filterPlayers()" name="ply" id="ply">
+                    <option value="All">Todos</option>  
+                    <option  *ngFor = "let player of players" [value] = player>{{player}}</option>
+                  </select>
+            </label>
+            <table class="tabla-terreno">
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0,0.34)" class="button-t" type="button">Zona1</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0,0.34)" class="button-t" type="button">Zona4</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0,0.34)" class="button-t" type="button">Zona7</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0,0.34)" class="button-t" type="button">Zona10</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0,0.34)" class="button-t" type="button">Zona13</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.34,0.68)" class="button-t" type="button">Zona2</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.34,0.68)" class="button-t" type="button">Zona5</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.34,0.68)" class="button-t" type="button">Zona8</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.34,0.68)" class="button-t" type="button">Zona11</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.34,0.68)" class="button-t" type="button">Zona14</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.68,1.01)" class="button-t" type="button">Zona3</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.68,1.01)" class="button-t" type="button">Zona6</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.68,1.01)" class="button-t" type="button">Zona9</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.68,1.01)" class="button-t" type="button">Zona12</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.68,1.01)" class="button-t" type="button">Zona15</button></td> 
+                </tr>
+                
+            </table>
+            
+            <table *ngIf = "accionesZ.length != 0" class="table table-hover" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>Tipo</th>
+                        <th>Subtipo</th>
+                        <th>Periodo</th>
+                        <th>Inicio x (Metros)</th>
+                        <th>Inicio y (Metros)</th>
+                        <th>Fin x (Metros)</th>
+                        <th>Fin y (Metros)</th>
+                        <th>Juega con</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let accionZ of accionesZ" class="text-center">
+                        <td>{{accionZ.team}}</td>
+                        <td>{{accionZ.typeAccion}}</td>
+                        <td>{{accionZ.subtype}}</td>
+                        <td>{{accionZ.periodAccion}}</td>
+                        <td>{{accionZ.startX * 100 | number:'1.2-2' }}</td>
+                        <td>{{accionZ.startY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endX * 100 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.toP}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div *ngIf = "tiempo == 3 && team == 'away'" >
+            <label for="">Jugador Interesado:
+                <select [(ngModel)]="playerZ" (change) = "filterPlayers()" name="ply" id="ply">
+                    <option value="All">Todos</option>  
+                    <option  *ngFor = "let player of players" [value] = player>{{player}}</option>
+                  </select>
+            </label>
+            <table class="tabla-terreno">
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0,0.34)" class="button-t" type="button">Zona1</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0,0.34)" class="button-t" type="button">Zona4</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0,0.34)" class="button-t" type="button">Zona7</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0,0.34)" class="button-t" type="button">Zona10</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0,0.34)" class="button-t" type="button">Zona13</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.34,0.68)" class="button-t" type="button">Zona2</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.34,0.68)" class="button-t" type="button">Zona5</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.34,0.68)" class="button-t" type="button">Zona8</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.34,0.68)" class="button-t" type="button">Zona11</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.34,0.68)" class="button-t" type="button">Zona14</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.68,1.01)" class="button-t" type="button">Zona3</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.68,1.01)" class="button-t" type="button">Zona6</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.68,1.01)" class="button-t" type="button">Zona9</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.68,1.01)" class="button-t" type="button">Zona12</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.68,1.01)" class="button-t" type="button">Zona15</button></td> 
+                </tr>
+                
+            </table>
+            
+            <table *ngIf = "accionesZ.length != 0" class="table table-hover" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>Tipo</th>
+                        <th>Subtipo</th>
+                        <th>Periodo</th>
+                        <th>Inicio x (Metros)</th>
+                        <th>Inicio y (Metros)</th>
+                        <th>Fin x (Metros)</th>
+                        <th>Fin y (Metros)</th>
+                        <th>Juega con</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let accionZ of accionesZ" class="text-center">
+                        <td>{{accionZ.team}}</td>
+                        <td>{{accionZ.typeAccion}}</td>
+                        <td>{{accionZ.subtype}}</td>
+                        <td>{{accionZ.periodAccion}}</td>
+                        <td>{{accionZ.startX * 100 | number:'1.2-2' }}</td>
+                        <td>{{accionZ.startY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endX * 100 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.toP}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div *ngIf = "tiempo == 3 && team == 'ambos'" >
+            <label for="">Jugador Interesado:
+                <select [(ngModel)]="playerZ" (change) = "filterPlayers()" name="ply" id="ply">
+                      <option  *ngFor = "let player of players" [value] = player>{{player}}</option>
+                  </select>
+            </label>
+            <table class="tabla-terreno">
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0,0.34)" class="button-t" type="button">Zona1</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0,0.34)" class="button-t" type="button">Zona4</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0,0.34)" class="button-t" type="button">Zona7</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0,0.34)" class="button-t" type="button">Zona10</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0,0.34)" class="button-t" type="button">Zona13</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.34,0.68)" class="button-t" type="button">Zona2</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.34,0.68)" class="button-t" type="button">Zona5</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.34,0.68)" class="button-t" type="button">Zona8</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.34,0.68)" class="button-t" type="button">Zona11</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.34,0.68)" class="button-t" type="button">Zona14</button></td>
+                </tr>
+                <tr>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0.68,1.01)" class="button-t" type="button">Zona3</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0.68,1.01)" class="button-t" type="button">Zona6</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0.68,1.01)" class="button-t" type="button">Zona9</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0.68,1.01)" class="button-t" type="button">Zona12</button></td>
+                    <td class="td-button"><button (click) = "StatsZona(0.808,1.01,0.68,1.01)" class="button-t" type="button">Zona15</button></td> 
+                </tr>
+                
+            </table>
+            
+            <table *ngIf = "accionesZ.length != 0" class="table table-hover" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th>Tipo</th>
+                        <th>Subtipo</th>
+                        <th>Periodo</th>
+                        <th>Inicio x (Metros)</th>
+                        <th>Inicio y (Metros)</th>
+                        <th>Fin x (Metros)</th>
+                        <th>Fin y (Metros)</th>
+                        <th>Juega con</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let accionZ of accionesZ" class="text-center">
+                        <td>{{accionZ.team}}</td>
+                        <td>{{accionZ.typeAccion}}</td>
+                        <td>{{accionZ.subtype}}</td>
+                        <td>{{accionZ.periodAccion}}</td>
+                        <td>{{accionZ.startX * 100 | number:'1.2-2' }}</td>
+                        <td>{{accionZ.startY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endX * 100 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.endY * 54 | number:'1.2-2'}}</td>
+                        <td>{{accionZ.toP}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        -->
+        <div class="card-header">
+            <h3>Stats por jugador</h3>
+        </div>
+        <div class="card-body">
+            <div >
+                <div class="form-group">
+                    <!-- <label for="">Nombre del jugador:
+                        <input  type="text" [(ngModel)]="player">
+                    </label>
+                     -->
+
+                    <label for="">Jugador Interesado:
+                        <select [(ngModel)]="player" (change) = "listaPlayers()" name="plyO" id="plyO">
+                              <option  *ngFor = "let player of players" [value] = player>{{player}}</option>
+                          </select>
+                    </label>
+                    <button (click) = "EnvioPlayer()" class="btn btn-info" type="button">Enviar</button>
+                </div>
+            </div>
+            
+            <div *ngIf = "doughnutChartData.length != 0" style="display: block;">
+                <canvas baseChart 
+                  [data]="doughnutChartData"
+                  [labels]="doughnutChartLabels"
+                  [chartType]="doughnutChartType"
+                  [colors]="backgroundColors">
+                </canvas>
+              </div>
+        </div>
+        <div *ngIf = "doughnutChartData.length != 0" class="card-header">
+            <h3>Acierto de pases: {{aciertoPases | number:'1.2-2' }} %</h3>
+            <h3 >Acierto a Portería: {{aciertoTiros | number:'1.2-2' }} %</h3>
+            <h3>Profundidad media del pase: {{profundidad | number:'1.2-2' }} metros</h3>
+            <h3>Longitud media del pase: {{longitud | number:'1.2-2' }} metros</h3>
+            <h3>Incidencia en el partido: {{incidencia | number:'1.2-2' }} % de las acciones totales del partido</h3>
+        </div>
+    </div>
+</div>
+
+  

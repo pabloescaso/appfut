@@ -1,0 +1,36 @@
+.button-t {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    visibility: hidden; 
+
+}
+
+.tabla-terreno{
+    background-image: url("../../../assets/campoFtbol.jpg");
+    width: 58.7%;
+    height: 436px;
+    background-repeat: no-repeat;
+    text-align: center;
+    margin: auto;
+    /*background-size: contain;*/
+    /*border: 2px solid black;*/
+}
+
+.td-button{
+    width: 15%;
+    height: 100%;
+    border: 0.8px solid grey;
+    height: 20px;
+}
+
+.td-button:hover button {
+    visibility: visible;
+    background-color: white;
+    opacity: 0.5;
+  }
+
+  
