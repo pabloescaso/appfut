@@ -1,9 +1,10 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, Inject, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Accion } from 'src/app/Modelo/Accion';
 import { AccionesService } from '../../services/acciones.service';
 import {  ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { MultiDataSet, Label } from 'ng2-charts';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-participacion',
@@ -36,7 +37,9 @@ export class ParticipacionComponent implements OnInit {
   incidenciaZ: any;
   incidenciaZT: any;
 
-  constructor(private service:AccionesService, private serviceP:AccionesService, private router:Router, private activatedRoute:ActivatedRoute) { 
+
+
+  constructor( public dialog: MatDialog,  private service:AccionesService, private serviceP:AccionesService, private router:Router, private activatedRoute:ActivatedRoute) { 
     
     this.activatedRoute.params.subscribe(
       params=> {
@@ -163,11 +166,21 @@ public backgroundColores: Array < any > = [{
       this.accionesZ=data;
       console.log(this.accionesZ.length);
     },error=>{console.log(error)})
-    
-    
+
+      
 
     /*GRAFICO DE BARRAS POR ZONAS*/ 
+    this.service.getIncidenciaZT(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
+    .subscribe(data=>{
+        this.incidenciaZT=data;
+        console.log(this.incidenciaZT);
+      
 
+    this.service.getIncidenciaZ(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
+    .subscribe(data=>{
+        this.incidenciaZ=data;
+        console.log(this.incidenciaZ);
+      
     this.service.getPasesZ(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
     .subscribe(data=>{
       this.pasesZ=data;
@@ -187,6 +200,16 @@ public backgroundColores: Array < any > = [{
       this.service.getRecuperacionesZ(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
     .subscribe(data=>{
       this.recuperacionesZ=data;
+      if(this.playerZ == 'All'){
+        console.log(this.incidenciaZ)
+      const dialogRef = this.dialog.open(ChartDialog, {
+        data: {
+          data: [{data:[this.pasesZ.length,this.perdidasZ.length,this.shotsZ.length,this.recuperacionesZ.length]}],
+          incidenciaZ: this.incidenciaZ,
+          incidenciaZT: this.incidenciaZT
+          
+        }
+      });}
       this.barChartData = [{data:[this.pasesZ.length,this.perdidasZ.length,this.shotsZ.length,this.recuperacionesZ.length]}]
 
     },error=>{console.log(error)})
@@ -197,22 +220,58 @@ public backgroundColores: Array < any > = [{
 
     },error=>{console.log(error)})
 
-    this.service.getIncidenciaZ(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
-    .subscribe(data=>{
-        this.incidenciaZ=data;
-        console.log(this.incidenciaZ);
-      },error=>{console.log(error)})
+    },error=>{console.log(error)})
 
-      this.service.getIncidenciaZT(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
-    .subscribe(data=>{
-        this.incidenciaZT=data;
-        console.log(this.incidenciaZT);
-      },error=>{console.log(error)})
+    },error=>{console.log(error)})
+
+
+    // this.service.getIncidenciaZ(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
+    // .subscribe(data=>{
+    //     this.incidenciaZ=data;
+    //     console.log(this.incidenciaZ);
+    //   },error=>{console.log(error)})
+
+    //   this.service.getIncidenciaZT(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
+    // .subscribe(data=>{
+    //     this.incidenciaZT=data;
+    //     console.log(this.incidenciaZT);
+    //   },error=>{console.log(error)})
     
   }
 
     
 }
 
+@Component({
+  selector: 'chart-dialog',
+  templateUrl: './chart-dialog.html'
+})
+export class ChartDialog implements OnInit{
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any){}
+
+  incidenciaZ: any
+  incidenciaZT: any
+
+  ngOnInit(): void {
+    this.barChartData = this.data.data
+    this.incidenciaZ = this.data.incidenciaZ
+    this.incidenciaZT = this.data.incidenciaZT
+  console.log(this.barChartData) 
+} 
+  public barChartOptions: ChartOptions = {
+    responsive: true,
+  };
+  public barChartLabels: Label[] = ['Pases', 'Ball Lost - Interception', 'Shot','Recoveries'];
+  public barChartType: ChartType = 'bar';
+  public barChartLegend = false;
+  public barChartPlugins = [];
+  
+  public barChartData: ChartDataSets[] = [
+   // { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' }
+  ];
+  public backgroundColores: Array < any > = [{
+    backgroundColor: ['#fc5858', '#19d863', '#fdf57d','#0000ff']
+  }];
+}
 
 

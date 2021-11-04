@@ -6,13 +6,16 @@ import { AppComponent } from './app.component';
 import { ListComponent } from './Partido/list/list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
-import { ParticipacionComponent } from './Accion/participacion/participacion.component';
+import { ChartDialog, ParticipacionComponent } from './Accion/participacion/participacion.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListComponent,
-    ParticipacionComponent
+    ParticipacionComponent,
+    ChartDialog
     
   ],
   imports: [
@@ -21,7 +24,9 @@ import { ParticipacionComponent } from './Accion/participacion/participacion.com
     FormsModule,
     HttpClientModule,
     ChartsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
