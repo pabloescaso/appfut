@@ -36,19 +36,7 @@
             </label>
             <table class="tabla-terreno">
                 <tr>
-                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0,0.34)" class="button-t" type="button">Zona1</button><div style="display: block;">
-                        <!-- <canvas baseChart style="background-color: white;"
-                          [datasets]="barChartData"
-                          [labels]="barChartLabels"
-                          [options]="barChartOptions"
-                          [plugins]="barChartPlugins"
-                          [legend]="barChartLegend"
-                          [chartType]="barChartType"
-                          [colors]="backgroundColores"
-                          >
-                          
-                        </canvas> -->
-                    </div></td>
+                    <td class="td-button"><button (click) = "StatsZona(0,0.202,0,0.34)" class="button-t" type="button">Zona1</button></td>
                     <td class="td-button"><button (click) = "StatsZona(0.202,0.404,0,0.34)" class="button-t" type="button">Zona4</button></td>
                     <td class="td-button"><button (click) = "StatsZona(0.404,0.606,0,0.34)" class="button-t" type="button">Zona7</button></td>
                     <td class="td-button"><button (click) = "StatsZona(0.606,0.808,0,0.34)" class="button-t" type="button">Zona10</button></td>
@@ -100,7 +88,7 @@
                 </tbody>
             </table>
 
-           <div *ngIf = "playerZ == 'All'" >
+           <!-- <div *ngIf = "playerZ == 'All'" >
                 <div style="display: block;">
                     <canvas baseChart 
                       [datasets]="barChartData"
@@ -117,7 +105,7 @@
                     <h3>Posesion general en zona: {{incidenciaZ | number:'1.2-2' }} %</h3>
                     <h3 >Posesion de equipo en zona: {{incidenciaZT | number:'1.2-2' }} %</h3>
                 </div>
-            </div> 
+            </div>  -->
 
         </div>
 
@@ -181,7 +169,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div *ngIf = "playerZ == 'All'" >
+            <!-- <div *ngIf = "playerZ == 'All'" >
                 <div style="display: block;">
                     <canvas baseChart 
                       [datasets]="barChartData"
@@ -198,7 +186,7 @@
                     <h3>Posesion general en zona: {{incidenciaZ | number:'1.2-2' }} %</h3>
                     <h3 >Posesion de equipo en zona: {{incidenciaZT | number:'1.2-2' }} %</h3>
                 </div>
-            </div> 
+            </div>  -->
         </div>
 
         <!-- <div *ngIf = "tiempo == 1 && team == 'ambos'" >
@@ -323,7 +311,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div *ngIf = "playerZ == 'All'" >
+            <!-- <div *ngIf = "playerZ == 'All'" >
                 <div style="display: block;">
                     <canvas baseChart 
                       [datasets]="barChartData"
@@ -340,7 +328,7 @@
                     <h3>Posesion general en zona: {{incidenciaZ | number:'1.2-2' }} %</h3>
                     <h3 >Posesion de equipo en zona: {{incidenciaZT | number:'1.2-2' }} %</h3>
                 </div>
-            </div> 
+            </div>  -->
         </div>
 
         <div *ngIf = "tiempo == 2 && team == 'away'" >
@@ -403,7 +391,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div *ngIf = "playerZ == 'All'" >
+            <!-- <div *ngIf = "playerZ == 'All'" >
                 <div style="display: block;">
                     <canvas baseChart 
                       [datasets]="barChartData"
@@ -420,7 +408,7 @@
                     <h3>Posesion general en zona: {{incidenciaZ | number:'1.2-2' }} %</h3>
                     <h3 >Posesion de equipo en zona: {{incidenciaZT | number:'1.2-2' }} %</h3>
                 </div>
-            </div> 
+            </div>  -->
         </div>
 
         <!-- <div *ngIf = "tiempo == 2 && team == 'ambos'" >
