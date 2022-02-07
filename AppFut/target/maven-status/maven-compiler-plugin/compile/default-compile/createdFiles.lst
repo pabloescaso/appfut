@@ -1,0 +1,12 @@
+com\pmaresc\app\entity\Accion.class
+com\pmaresc\app\entity\Partido.class
+com\pmaresc\app\AppFutApplication.class
+com\pmaresc\app\controller\AccionController.class
+com\pmaresc\app\controller\PartidoController.class
+com\pmaresc\app\service\PartidoService.class
+com\pmaresc\app\repository\AccionRepository.class
+com\pmaresc\app\service\AccionService.class
+com\pmaresc\app\repository\PartidoRepository.class
+com\pmaresc\app\service\PartidoServiceImpl.class
+com\pmaresc\app\service\AccionServiceImpl.class
+com\pmaresc\app\service\AccionServiceImpl$1.class
