@@ -1,18 +1,42 @@
-<div class="content" role="main">
+<!doctype html>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <img src="assets/footstats.jpg" style="margin-right: 40px;">
+    <!-- <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button> -->
 
-  <!-- Highlight Card -->
-<header style="text-align: center;">
-  <img src="./assets/footstats.jpg">
-  
-  <div class="container">
-    <button (click)= "List()" class="btn btn-info">Lista de Partidos</button>
-    <!--<button (click)= "Add()" class="btn btn-info" style="margin-left: 10px;">Nuevo</button>-->
+    <div class="collapse navbar-collapse" id="navbarColor03">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item" >
+          <button class="btn btn-warning" (click)="List()">Lista de Partidos</button>
+        </li>
+        <!--<li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Separated link</a>
+          </div>
+        </li> -->
+      </ul>
+      <!-- <form class="d-flex">
+        <input class="form-control me-sm-2" type="text" placeholder="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+      </form> -->
+    </div>
   </div>
-</header>
-
-
+</nav>
 <router-outlet></router-outlet>
-
-<footer>
-    
-</footer>

@@ -1,9 +1,11 @@
 package com.pmaresc.app.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -421,6 +423,32 @@ public class AccionController {
 			List<Accion> getRecuperacionesZ = (List<Accion>) AccionService.getRecuperacionesZ ( tipo,  part,  xMin,  xMax,  yMin,  yMax,  team,  period);
 
 		    return getRecuperacionesZ;
+		}
+		
+		@GetMapping("/datos/participacion/{idPart}/{period}/{team}/{player}/{checkedPases}/{checkedFallados}/{checkedShots}/{checkedRecuperaciones}/{xMin}/{xMax}/{yMin}/{yMax}")
+		public List<Accion> getDatosP(@PathVariable(value = "idPart") Long idPart, @PathVariable(value = "period") int period , @PathVariable(value = "team") String team ,@PathVariable(value = "player") String player, @PathVariable(value = "checkedPases") boolean checkedPases, @PathVariable(value = "checkedFallados") boolean checkedFallados, @PathVariable(value = "checkedRecuperaciones") boolean checkedRecuperaciones, @PathVariable(value = "checkedShots") boolean checkedShots, @PathVariable(value = "xMin") Float xMin, @PathVariable(value = "xMax") Float xMax, @PathVariable(value = "yMin") Float yMin, @PathVariable(value = "yMax") Float yMax) {
+			
+			Set <Accion> getDatosP = new HashSet<Accion>();
+			List<Accion> getDatosAux;
+			Partido part = partidoService.getPartido(idPart);
+			if(checkedPases == true) {
+				getDatosAux = (List<Accion>) AccionService.getPasesZP ( "PASS",  part,  xMin,  xMax,  yMin,  yMax,  team,  period, player);
+				getDatosP.addAll(getDatosAux);
+			}
+			if(checkedFallados == true) {
+				getDatosAux = (List<Accion>) AccionService.getPasesFalladosZP ( "BALL LOST",  part,  xMin,  xMax,  yMin,  yMax,  "INTERCEPTION",  team,  period, player);
+				getDatosP.addAll(getDatosAux);
+			}
+			if(checkedShots == true) {
+				getDatosAux = (List<Accion>) AccionService.getShotsZP ( "SHOT",  team,  part,  xMin,  xMax,  yMin,  yMax,  period, player);
+				getDatosP.addAll(getDatosAux);
+			}
+			if(checkedRecuperaciones == true) {
+				getDatosAux = (List<Accion>) AccionService.getRecuperacionesZP ( "RECOVERY",  part,  xMin,  xMax,  yMin,  yMax,  team,  period, player);
+				getDatosP.addAll(getDatosAux);
+			}
+
+		    return new ArrayList<Accion>(getDatosP);
 		}
 		
 }

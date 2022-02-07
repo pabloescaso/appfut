@@ -186,6 +186,34 @@ public class AccionServiceImpl implements AccionService{
         return getRecuperacionesZ;
 	}
 	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Accion> getPasesZP (String tipo, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, String team, int period, String player){
+		List<Accion> getPasesZP = (List<Accion>) accionRepository.getPasesZP ( tipo, idPart, xMin, xMax, yMin, yMax, team, period, player);
+        return getPasesZP;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Accion> getPasesFalladosZP (String tipo, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, String subtipo, String team, int period, String player){
+		List<Accion> getPasesFalladosZP = (List<Accion>) accionRepository.getPasesFalladosZP ( tipo, idPart, xMin, xMax, yMin, yMax, subtipo, team, period, player);
+        return getPasesFalladosZP;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Accion> getShotsZP (String tipo, String team, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, int period, String player){
+		List<Accion> getShotsZP = (List<Accion>) accionRepository.getShotsZP ( tipo, team, idPart, xMin, xMax, yMin, yMax, period, player);
+        return getShotsZP;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Accion> getRecuperacionesZP (String tipo, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, String team, int period, String player){
+		List<Accion> getRecuperacionesZP = (List<Accion>) accionRepository.getRecuperacionesZP ( tipo, idPart, xMin, xMax, yMin, yMax, team, period, player);
+        return getRecuperacionesZP;
+	}
+	
 	@Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {

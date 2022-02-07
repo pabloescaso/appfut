@@ -10,7 +10,7 @@
 }
 
 .tabla-terreno{
-    background-image: url("../../../assets/campoFtbol.jpg");
+    background-image: url("../../../assets/LineasCampo.png");
     background-size: cover;
     background-repeat: no-repeat;
     width: 100%;
@@ -34,4 +34,15 @@
     opacity: 0.5;
   }
 
+.hiden {
+    display: none;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.object-cover {
+    object-fit: cover;
+}
   

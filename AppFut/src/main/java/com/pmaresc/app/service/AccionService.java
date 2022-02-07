@@ -59,4 +59,12 @@ public interface AccionService {
 	public List<Accion> getRecuperacionesZ (String tipo, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, String team, int period);
 	
 	public List<Accion> getParticipacionT (String team,Partido idPart);
+	
+	public List<Accion> getPasesZP (String tipo, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, String team, int period, String player);
+	
+	public List<Accion> getPasesFalladosZP (String tipo, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, String subtipo, String team, int period, String player);
+	
+	public List<Accion> getShotsZP (String tipo, String team, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, int period, String player);
+	
+	public List<Accion> getRecuperacionesZP (String tipo, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, String team, int period, String player);
 }

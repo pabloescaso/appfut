@@ -67,4 +67,16 @@ public interface AccionRepository extends JpaRepository<Accion, Long>{
 	
 	@Query("SELECT DISTINCT fromP FROM Accion a WHERE a.idPartido = ?1")
 	public List<String> getJugadoresAll (Partido idPart);
+	
+	@Query("SELECT a FROM Accion a WHERE a.typeAccion = ?1 AND a.idPartido = ?2 AND a.startX > ?3 AND a.startX < ?4 AND a.startY > ?5 AND a.startY < ?6 AND a.team = ?7 AND a.periodAccion = ?8 AND a.fromP = ?9")
+	public List<Accion> getPasesZP (String tipo, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, String team, int period, String player );
+	
+	@Query("SELECT a FROM Accion a WHERE a.typeAccion = ?1 AND a.idPartido = ?2 AND a.startX > ?3 AND a.startX < ?4 AND a.startY > ?5 AND a.startY < ?6 AND a.subtype = ?7 AND a.team = ?8 AND a.periodAccion = ?9 AND a.fromP = ?10")
+	public List<Accion> getPasesFalladosZP (String tipo, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, String subtipo, String team, int period, String player);
+	
+	@Query("SELECT a FROM Accion a WHERE a.typeAccion = ?1 AND a.team = ?2 AND a.idPartido = ?3 AND a.startX > ?4 AND a.startX < ?5 AND a.startY > ?6 AND a.startY < ?7 AND a.periodAccion = ?8 AND a.fromP = ?9")
+	public List<Accion> getShotsZP (String tipo, String team, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, int period, String player);
+	
+	@Query("SELECT a FROM Accion a WHERE a.typeAccion = ?1 AND a.idPartido = ?2 AND a.startX > ?3 AND a.startX < ?4 AND a.startY > ?5 AND a.startY < ?6 AND a.team = ?7 AND a.periodAccion = ?8 AND a.fromP = ?9")
+	public List<Accion> getRecuperacionesZP (String tipo, Partido idPart, Float xMin, Float xMax, Float yMin, Float yMax, String team, int period, String player);
 }

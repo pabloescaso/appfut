@@ -90,4 +90,8 @@ export class AccionesService {
   getIncidenciaZT(idPartido:any, tiempo:any ,team:any, startxMin:number, startxMax:number, startyMin:number, startyMax:number){
     return this.http.get<number>(this.Url + `/zonas/participacionT/${idPartido}/${tiempo}/${team}/${startxMin}/${startxMax}/${startyMin}/${startyMax}`);
   }
+
+  getDatosP(idPartido:any, tiempo:any ,team:any,playerZ:any,checkedPases:boolean,checkedFallados:boolean,checkedShots:boolean,checkedRecuperaciones:boolean, startxMin:number, startxMax:number, startyMin:number, startyMax:number){
+    return this.http.get<Accion[]>(this.Url + `/datos/participacion/${idPartido}/${tiempo}/${team}/${playerZ}/${checkedPases}/${checkedFallados}/${checkedShots}/${checkedRecuperaciones}/${startxMin}/${startxMax}/${startyMin}/${startyMax}`);
+  }
 }

@@ -1,5 +1,6 @@
+<!doctype html>
 <div class="container">
-    <div class="class">
+    <div class="card bg-light mb-3 mt-5">
         <div class="card-header">
             <h3>Partidos</h3>
         </div>
@@ -16,7 +17,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor = "let partido of partidos" class="text-center">
+                    <tr *ngFor = "let partido of partidos" class="table-info">
                         <td>{{partido.idPartido}}</td>
                         <td>{{partido.nombre}}</td>
                         <td>{{partido.descripcion}}</td>
