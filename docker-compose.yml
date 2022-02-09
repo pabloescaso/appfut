@@ -1,0 +1,57 @@
+version: "3"
+
+services:
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: apiDockerfile
+    ports: 
+      - "8080:8080"
+    depends_on: 
+      - mysql
+    links:
+      - mysql
+    volumes: 
+      - ./AppFut:/opt/app
+    restart: always 
+  mysql:
+      container_name: mysql
+      build:
+        context: .
+        dockerfile: sqlDockerfile
+      ports: 
+        - "3306:3306"
+      environment: 
+        MYSQL_ROOT_PASSWORD: appfutpass
+        MYSQL_DATABASE: dbtfg
+        MYSQL_USER: testtest
+        MYSQL_PASSWORD: 123
+      volumes: 
+        - mysql-data:/var/lib/mysql
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports: 
+      - "8000:80"
+    environment:
+      PMA_USER: root 
+      PMA_PASSWORD: appfutpass
+      PMA_HOST: mysql
+    depends_on: 
+      - mysql
+    links: 
+      - mysql
+    logging:
+      driver: none
+  client:
+    container_name: client
+    build: 
+      context: .
+      dockerfile: frontDockerfile
+    ports:
+      - "80:4200"
+    restart: always
+volumes:
+  mysql-data:
+ 
