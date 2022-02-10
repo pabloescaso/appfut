@@ -105,6 +105,7 @@ export class ParticipacionComponent implements OnInit {
 
     // line
     this.ctx.strokeStyle = color;
+    this.ctx.lineWidth = size;
     this.ctx.beginPath();
     this.ctx.moveTo(0, 0);
     this.ctx.lineTo(hyp - size, 0);
@@ -113,9 +114,9 @@ export class ParticipacionComponent implements OnInit {
     // triangle
     this.ctx.fillStyle = color;
     this.ctx.beginPath();
-    this.ctx.lineTo(hyp - size, size);
+    this.ctx.lineTo(hyp - size*1.25, size*1.25);
     this.ctx.lineTo(hyp, 0);
-    this.ctx.lineTo(hyp - size, -size);
+    this.ctx.lineTo(hyp - size*1.25, -size*1.25);
     this.ctx.fill();
 
     this.ctx.restore();
@@ -255,16 +256,16 @@ public backgroundColores: Array < any > = [{
 
     data.forEach(accion => {
       if(accion.typeAccion == 'PASS'){
-        this.drawArrow({x:Math.abs(accion.startX * 957),y:Math.abs(accion.startY * 517)},{x:Math.abs(accion.endX * 957) ,y:Math.abs(accion.endY * 517)},7,"green");
+        this.drawArrow({x:Math.abs(accion.startX * 957),y:Math.abs(accion.startY * 517)},{x:Math.abs(accion.endX * 957) ,y:Math.abs(accion.endY * 517)},5,"green");
       }
       if(accion.typeAccion == 'BALL LOST'){
         if(accion.endX && accion.endY)
-        this.drawArrow({x:Math.abs(accion.startX * 957),y:Math.abs(accion.startY * 517)},{x:Math.abs(accion.endX * 957) ,y:Math.abs(accion.endY * 517)},7,"red");
+        this.drawArrow({x:Math.abs(accion.startX * 957),y:Math.abs(accion.startY * 517)},{x:Math.abs(accion.endX * 957) ,y:Math.abs(accion.endY * 517)},5,"red");
         else
         this.drawPunto(Math.abs(accion.startX * 957),Math.abs(accion.startY * 517),"red");
       }
       if(accion.typeAccion == 'SHOT'){
-        this.drawArrow({x:Math.abs(accion.startX * 957),y:Math.abs(accion.startY * 517)},{x:Math.abs(accion.endX * 957) ,y:Math.abs(accion.endY * 517)},7,"blue");
+        this.drawArrow({x:Math.abs(accion.startX * 957),y:Math.abs(accion.startY * 517)},{x:Math.abs(accion.endX * 957) ,y:Math.abs(accion.endY * 517)},5,"blue");
       }
       if(accion.typeAccion == 'RECOVERY'){
         this.drawPunto(Math.abs(accion.startX * 957),Math.abs(accion.startY * 517),"purple");
@@ -368,40 +369,18 @@ public backgroundColores: Array < any > = [{
   //   //   },error=>{console.log(error)})
     
   // }
+  public openLeyenda(){
+    this.dialog.open(ChartDialog);  
+  }
 
-    
 }
 
 @Component({
   selector: 'chart-dialog',
   templateUrl: './chart-dialog.html'
 })
-export class ChartDialog implements OnInit{
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any){}
-
-  incidenciaZ: any
-  incidenciaZT: any
-
-  ngOnInit(): void {
-    this.barChartData = this.data.data
-    this.incidenciaZ = this.data.incidenciaZ
-    this.incidenciaZT = this.data.incidenciaZT
-  console.log(this.barChartData) 
-} 
-  public barChartOptions: ChartOptions = {
-    responsive: true,
-  };
-  public barChartLabels: Label[] = ['Pases', 'Ball Lost - Interception', 'Shot','Recoveries'];
-  public barChartType: ChartType = 'bar';
-  public barChartLegend = false;
-  public barChartPlugins = [];
-  
-  public barChartData: ChartDataSets[] = [
-   // { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' }
-  ];
-  public backgroundColores: Array < any > = [{
-    backgroundColor: ['#fc5858', '#19d863', '#fdf57d','#0000ff']
-  }];
+export class ChartDialog{
+  constructor(){}
 }
 
 
