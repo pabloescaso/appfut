@@ -71,23 +71,30 @@ export class ParticipacionComponent implements OnInit {
     this.myCanvas.nativeElement.height = this.myImage.nativeElement.height;
 
     this.ctx.drawImage(this.myImage.nativeElement, 0,0,this.myImage.nativeElement.width,this.myImage.nativeElement.height);
-
-    //this.ctx.fillStyle = "blue";
-    //this.ctx.fillRect(478,260,11,11);
-
-    // this.ctx.strokeStyle = "red";
-    // this.ctx.lineWidth = 3;
-    // this.ctx.beginPath();
-    // this.ctx.moveTo(50,50);
-    // this.ctx.lineTo(100,100);
-    // this.ctx.stroke();
-
-    // this.ctx.beginPath();
-    // this.ctx.moveTo(120,120);
-    // this.ctx.lineTo(200,100);
-    // this.ctx.stroke();
+    this.lineasDivisorias();
 
     
+    
+  }
+
+  public lineasDivisorias(){
+
+    // line
+    this.ctx.strokeStyle = '#00000';
+    this.ctx.lineWidth = 3;
+    this.ctx.beginPath();
+    this.ctx.moveTo(310.38, 517);
+    this.ctx.lineTo(310.38, 0);
+    this.ctx.stroke();
+
+    this.ctx.strokeStyle = '#00000';
+    this.ctx.lineWidth = 3;
+    this.ctx.beginPath();
+    this.ctx.moveTo(650.76, 517);
+    this.ctx.lineTo(650.76, 0);
+    this.ctx.stroke();
+
+    this.ctx.restore();
   }
 
   public drawPunto(x:any,y:any,color:any){
@@ -253,6 +260,7 @@ public backgroundColores: Array < any > = [{
   public drawData(data:Accion[]){
     this.ctx.clearRect(0,0,this.myCanvas.nativeElement.width,this.myCanvas.nativeElement.height);
     this.ctx.drawImage(this.myImage.nativeElement, 0,0,this.myImage.nativeElement.width,this.myImage.nativeElement.height);
+    this.lineasDivisorias();
 
     data.forEach(accion => {
       if(accion.typeAccion == 'PASS'){
@@ -271,104 +279,13 @@ public backgroundColores: Array < any > = [{
         this.drawPunto(Math.abs(accion.startX * 957),Math.abs(accion.startY * 517),"purple");
       }
           
-          // if(this.tiempo == 1){
-          //   this.drawArrow({x:Math.abs(accion.startX * 957),y:Math.abs(accion.startY * 517)},{x:Math.abs(accion.endX * 957) ,y:Math.abs(accion.endY * 517)},7,"green");
-          // } else {
-          //   this.ctx.save();
-          //   // rotate the canvas to the specified degrees
-          //   this.ctx.translate(this.myCanvas.nativeElement.width/2,this.myCanvas.nativeElement.height/2);
-          //   this.ctx.rotate(180 * Math.PI/180);
-          //   this.ctx.translate(this.myCanvas.nativeElement.width,this.myCanvas.nativeElement.height);
-          //   this.drawArrow({x:Math.abs(accion.startX * 957),y:-Math.abs(accion.startY * 517)},{x:Math.abs(accion.endX * 957) ,y:Math.abs(accion.endY * 517)},7,"green");
-          //   console.log({x:-Math.abs(accion.startX * 957),y:-Math.abs(accion.startY * 517)},{x:-Math.abs(accion.endX * 957) ,y:-Math.abs(accion.endY * 517)});
-          //   this.ctx.restore();
-          // }
+
           
         
     })
   }
 
-  // StatsZona(startxMin:number, startxMax:number, startyMin:number, startyMax:number){
 
-  //   console.log(startxMin,startxMax,startyMin,startyMax,this.playerZ,this.idPartido);
-  //   this.service.getZonasAction(this.idPartido,this.playerZ,startxMin,startxMax,startyMin,startyMax,this.tiempo,this.team)
-
-  //   .subscribe(data=>{
-  //     this.accionesZ=data;
-  //     console.log(this.accionesZ.length);
-  //   },error=>{console.log(error)})
-
-      
-
-  //   /*GRAFICO DE BARRAS POR ZONAS*/ 
-  //   this.service.getIncidenciaZT(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
-  //   .subscribe(data=>{
-  //       this.incidenciaZT=data;
-  //       console.log(this.incidenciaZT);
-      
-
-  //   this.service.getIncidenciaZ(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
-  //   .subscribe(data=>{
-  //       this.incidenciaZ=data;
-  //       console.log(this.incidenciaZ);
-      
-  //   this.service.getPasesZ(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
-  //   .subscribe(data=>{
-  //     this.pasesZ=data;
-  //     console.log(this.pasesZ.length);
-
-  //   this.service.getPerdidasZ(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
-  //   .subscribe(data=>{
-  //     this.perdidasZ=data;
-  //     console.log(this.perdidasZ.length);
-
-  //   this.service.getTirosZ(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
-  //   .subscribe(data=>{
-  //     this.shotsZ=data;
-      
-  //     console.log(this.shotsZ.length);
-
-  //     this.service.getRecuperacionesZ(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
-  //   .subscribe(data=>{
-  //     this.recuperacionesZ=data;
-  //     if(this.playerZ == 'All'){
-  //       console.log(this.incidenciaZ)
-  //     const dialogRef = this.dialog.open(ChartDialog, {
-  //       data: {
-  //         data: [{data:[this.pasesZ.length,this.perdidasZ.length,this.shotsZ.length,this.recuperacionesZ.length]}],
-  //         incidenciaZ: this.incidenciaZ,
-  //         incidenciaZT: this.incidenciaZT
-          
-  //       }
-  //     });}
-  //     this.barChartData = [{data:[this.pasesZ.length,this.perdidasZ.length,this.shotsZ.length,this.recuperacionesZ.length]}]
-
-  //   },error=>{console.log(error)})
-
-  //   },error=>{console.log(error)})
-
-  //   },error=>{console.log(error)})
-
-  //   },error=>{console.log(error)})
-
-  //   },error=>{console.log(error)})
-
-  //   },error=>{console.log(error)})
-
-
-  //   // this.service.getIncidenciaZ(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
-  //   // .subscribe(data=>{
-  //   //     this.incidenciaZ=data;
-  //   //     console.log(this.incidenciaZ);
-  //   //   },error=>{console.log(error)})
-
-  //   //   this.service.getIncidenciaZT(this.idPartido,this.tiempo,this.team,startxMin,startxMax,startyMin,startyMax)
-  //   // .subscribe(data=>{
-  //   //     this.incidenciaZT=data;
-  //   //     console.log(this.incidenciaZT);
-  //   //   },error=>{console.log(error)})
-    
-  // }
   public openLeyenda(){
     this.dialog.open(ChartDialog);  
   }
